@@ -41,7 +41,7 @@ public class EventActivity extends Activity {
 			calSet.setTimeInMillis(System.currentTimeMillis());
 			
 			calSet.set(Calendar.MONTH, alarmDate.getMonth());
-			calSet.set(Calendar.DAY_OF_MONTH, alarmDate.getDay()-1);
+			calSet.set(Calendar.DAY_OF_MONTH, alarmDate.getDate());
 			calSet.set(Calendar.HOUR_OF_DAY, alarmDate.getHours());
 			calSet.set(Calendar.MINUTE, alarmDate.getMinutes());
 			calSet.set(Calendar.SECOND, 0);
@@ -72,21 +72,25 @@ public class EventActivity extends Activity {
 			Bundle extras = getIntent().getExtras();
 			String eventId = extras.getString("eventId");
 			String eventInfo = extras.getString("eventInfo");
-			
 			TextView infoView = (TextView)findViewById(R.id.event_name);
 			TextView contentView = (TextView)findViewById(R.id.event_content);
 			Button alarmButton = (Button)findViewById(R.id.touroku);
 			Button gotoReservedList = (Button)findViewById(R.id.schedule);
-			//decode json		
-			jObject=new JSONObject(eventInfo);
-			eventsArray = new JSONArray(jObject.getString("events"));
-			    
-			//find event by clicked id
-			for (int i = 0; i<eventsArray.length(); i++) {
-			    String t_id = eventsArray.getJSONObject(i).getString("event_id");
-			    if (t_id.equals(eventId))  mThisEvent = eventsArray.getJSONObject(i); 
-			}
+			if (!getIntent().hasExtra("fromMap")) {			
+				//decode json		
+				jObject=new JSONObject(eventInfo);
+				eventsArray = new JSONArray(jObject.getString("events"));
 				
+				//find event by clicked id
+				for (int i = 0; i<eventsArray.length(); i++) {
+				    String t_id = eventsArray.getJSONObject(i).getString("event_id");
+				    if (t_id.equals(eventId))  mThisEvent = eventsArray.getJSONObject(i); 
+				}
+			}
+			else {
+				jObject=new JSONObject(eventInfo);
+				mThisEvent = jObject;
+			}
 			if (mThisEvent != null) {
 				infoView.setText(mThisEvent.getString("event_name"));
 				String text = "";

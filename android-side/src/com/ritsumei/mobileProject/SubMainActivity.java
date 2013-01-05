@@ -1,17 +1,18 @@
 /**
-* Map view activity
-* @author huydx 
-* @version 0.9
-*/
-
+ * Map view activity
+ * @author huydx 
+ * @version 0.9
+ */
 
 package com.ritsumei.mobileProject;
 
 import java.util.*;
 import org.json.*;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
@@ -31,7 +32,12 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MyLocationOverlay;
+import com.google.android.maps.Overlay;
 import com.ritsumei.mobileProject.R;
+
+import android.graphics.drawable.Drawable;
+import com.google.android.maps.ItemizedOverlay;
+import com.google.android.maps.OverlayItem;
 
 public class SubMainActivity extends MapActivity {
 	/** Called when the activity is first created. */
@@ -43,7 +49,8 @@ public class SubMainActivity extends MapActivity {
 	private MyLocationOverlay mMyLocationOverlay;
 	private String best;
 	private ArrayList<String> mNoticedEvent;
-
+	private ArrayList<JSONObject> mListAllEvent = new ArrayList<JSONObject>();
+	
 	private void CenterLocation(GeoPoint centerGeoPoint) {
 		mMapController.animateTo(centerGeoPoint);
 		mMapView.getOverlays().add(mMyLocationOverlay);
@@ -75,17 +82,17 @@ public class SubMainActivity extends MapActivity {
 		}
 
 		if (isNew == true) {
-			Vibrator v = (Vibrator) getApplicationContext()
-					.getSystemService(Context.VIBRATOR_SERVICE);
+			Vibrator v = (Vibrator) getApplicationContext().getSystemService(
+					Context.VIBRATOR_SERVICE);
 			v.vibrate(1000);
-			
+
 			Dialog dialog = new Dialog(SubMainActivity.this);
 			dialog.setContentView(R.layout.mydialog);
 			dialog.setTitle("イベント発見");
 			dialog.setCancelable(true);
-			
-			 TextView text = (TextView) dialog.findViewById(R.id.TextView01);
-             text.setText(R.string.event_discover);
+
+			TextView text = (TextView) dialog.findViewById(R.id.TextView01);
+			text.setText(R.string.event_discover);
 
 			ImageView img = (ImageView) dialog.findViewById(R.id.ImageView01);
 			img.setImageResource(R.drawable.warning);
@@ -113,13 +120,50 @@ public class SubMainActivity extends MapActivity {
 			String lat = Double.toString(centerGeoPoint.getLatitudeE6() / 1E6);
 			String lng = Double.toString(centerGeoPoint.getLongitudeE6() / 1E6);
 			ASyncRequest request = new ASyncRequest();
-			responseBody = request.execute(lat, lng).get();
+			responseBody = request.execute(
+					"http://cx0cjz7-afx-app000.c4sa.net/", lat, lng).get();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "";
 		}
 		return responseBody;
+	}
+
+	private void DrawAllEvent() {
+		try {
+			String responseBody;
+			ASyncRequest request = new ASyncRequest();
+			responseBody = request.execute("http://cx0cjz7-afx-app000.c4sa.net/getall.php").get();
+			if (!responseBody.equals("")) {
+				JSONObject jObject = null;
+				JSONArray eventsArray = null;
+				try {
+					jObject = new JSONObject(responseBody);
+					eventsArray = new JSONArray(jObject.getString("events"));
+					Drawable drawable = this.getResources().getDrawable(R.drawable.marker);				
+					CustomItemizedOverlay itemizedoverlay = new CustomItemizedOverlay(drawable, this);
+					
+					for (int i = 0; i < eventsArray.length(); i++) {
+						String latitude = eventsArray.getJSONObject(i).getString("latitude").toString();
+						String longtitude = eventsArray.getJSONObject(i).getString("longtitude").toString();
+						GeoPoint geopoint = new GeoPoint((int)(Float.parseFloat(latitude) * 1E6), (int)(Float.parseFloat(longtitude) * 1E6));
+						OverlayItem overlayitem = new OverlayItem(geopoint, 
+								eventsArray.getJSONObject(i).getString("event_name"), 
+								eventsArray.getJSONObject(i).getString("event_content"));
+						itemizedoverlay.addOverlay(overlayitem);
+						mListAllEvent.add(eventsArray.getJSONObject(i));
+					}
+					mMapView.getOverlays().add(itemizedoverlay);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return;
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -170,6 +214,7 @@ public class SubMainActivity extends MapActivity {
 					.getLatitude() * 1000000), (int) (mLocationManager
 					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
 					.getLongitude() * 1000000));
+			DrawAllEvent();
 			CenterLocation(initGeoPoint);
 			String ret = IsNeerEventPoint(initGeoPoint);
 			if (ret.length() > 0) {
@@ -222,6 +267,60 @@ public class SubMainActivity extends MapActivity {
 		}
 
 		public void onStatusChanged(String provider, int status, Bundle extras) {
+		}
+	}
+
+	public class CustomItemizedOverlay extends ItemizedOverlay {
+
+		private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+		private Context mContext;
+
+		public CustomItemizedOverlay(Drawable defaultMarker, Context context) {
+			super(boundCenterBottom(defaultMarker));
+			// TODO Auto-generated constructor stub
+			mContext = context;
+		}
+
+		@Override
+		protected OverlayItem createItem(int i) {
+			return mOverlays.get(i);
+		}
+
+		@Override
+		public int size() {
+			return mOverlays.size();
+		}
+
+		public void addOverlay(OverlayItem overlay) {
+			mOverlays.add(overlay);
+			populate();
+		}
+
+		@Override
+		protected boolean onTap(int index) {
+			final int idx = index;
+			OverlayItem item = mOverlays.get(index);
+			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+			dialog.setTitle(item.getTitle());
+			dialog.setMessage(item.getSnippet()).setPositiveButton("予約", new DialogInterface.OnClickListener() {				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					try {
+						JSONObject obj = mListAllEvent.get(idx);
+						Intent i = new Intent(getApplicationContext(), EventActivity.class);
+						i.putExtra("eventName", obj.getString("event_name"));
+						i.putExtra("eventId", obj.getString("event_id"));
+						i.putExtra("fromMap", true);
+						i.putExtra("eventInfo",obj.toString());
+						startActivity(i);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			});
+			dialog.show();
+			return true;
 		}
 	}
 }

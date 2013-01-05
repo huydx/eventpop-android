@@ -12,6 +12,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.*;
 import android.net.Uri;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
 import android.widget.Toast;
 
@@ -20,6 +22,9 @@ public class AlarmService extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        final WakeLock wakeLock = pm.newWakeLock((PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP), "TAG");
+        wakeLock.acquire();
 		Toast.makeText(context, "Alarm worked.", Toast.LENGTH_LONG).show();
 		Vibrator v = (Vibrator) context
 				.getSystemService(Context.VIBRATOR_SERVICE);
@@ -34,6 +39,7 @@ public class AlarmService extends BroadcastReceiver {
 		    @Override
 		    public void run() {
 		        alarmRingtone.stop();
+		        wakeLock.release();
 		    }
 		};
 		Timer timer = new Timer();

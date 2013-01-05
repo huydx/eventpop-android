@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="server_endpoint">http://cx0cjz7-afx-app000.c4sa.net/</string>
     <string name="app_name">Event Pop</string>
     <string name="event_discover">イベントを発見しました!このイベントを見てみますか？良ければ、「移動」ボタンを押してください</string>
 </resources>
