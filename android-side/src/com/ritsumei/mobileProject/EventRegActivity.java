@@ -66,10 +66,6 @@ public class EventRegActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// When clicked, show a toast with the TextView text
-				Event evenList = (Event) parent.getItemAtPosition(position);
-				Toast.makeText(getApplicationContext(),
-						"Clicked on Row: " + evenList.getName(),
-						Toast.LENGTH_LONG).show();
 			}
 		});
 
@@ -81,7 +77,7 @@ public class EventRegActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				StringBuffer responseText = new StringBuffer();
-				responseText.append("The following were selected...\n");
+				responseText.append("以下のイベント予約が削除されました\n");
 
 				ArrayList<Event> eventList = mListEvent;
 				for (int i = 0; i < eventList.size(); i++) {
@@ -144,8 +140,7 @@ public class EventRegActivity extends Activity {
 						Event e = (Event)v.getTag();
 						Toast.makeText(
 								getApplicationContext(),
-								"Clicked on Checkbox: " + cb.getText() + " is "
-										+ cb.isChecked(), Toast.LENGTH_LONG)
+								"イベントを選択した: " + cb.getText(), Toast.LENGTH_LONG)
 								.show();
 						e.setSelected(cb.isChecked());
 					}

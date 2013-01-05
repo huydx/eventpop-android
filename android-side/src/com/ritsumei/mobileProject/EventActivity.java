@@ -35,7 +35,6 @@ public class EventActivity extends Activity {
 		try {
 			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.JAPAN);
 			Date alarmDate = fmt.parse(date);
-			
 			Calendar calNow = Calendar.getInstance();
 			Calendar calSet = (Calendar) calNow.clone();
 

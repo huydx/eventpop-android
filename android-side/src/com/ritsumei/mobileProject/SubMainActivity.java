@@ -18,6 +18,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -74,7 +75,10 @@ public class SubMainActivity extends MapActivity {
 		}
 
 		if (isNew == true) {
-
+			Vibrator v = (Vibrator) getApplicationContext()
+					.getSystemService(Context.VIBRATOR_SERVICE);
+			v.vibrate(1000);
+			
 			Dialog dialog = new Dialog(SubMainActivity.this);
 			dialog.setContentView(R.layout.mydialog);
 			dialog.setTitle("イベント発見");
