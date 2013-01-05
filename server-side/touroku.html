@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Event registration form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script type="text/javascript" src='http://maps.google.com/maps/api/js?sensor=false'></script>
+    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'></script>
+    <script type='text/javascript' src='./js/if_gmap.js'></script>
+    <script type='text/javascript' src='./js/datetimepicker.js'></script>
+    
+    <!-- Le styles -->
+    <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+  </head>
+  
+  <body bgcolor="#A4A4A4" onload="if_gmap_init();">
+    <div class="container">
+      <div class="row">
+        <div class = "span6"> 
+          <form class="form-horizontal" id="registerHere" method="post" action="touroku.php">
+            <fieldset>
+              <legend> Event information </legend>
+              <div class="control-group">
+                <label class="control-label" for="input01">Event Name</label>
+                <div class="controls">
+                  <input type="text" class="input-xlarge" id="event_name" name="event_name" rel="popover" data-content="Enter event name" data-original-title="event name">
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="input01">Event Detail</label>
+                <div class="controls">
+                  <input type="text" class="input-xlarge" id="event_detail" name="event_detail" rel="popover" data-content="Enter event name" data-original-title="event detail">
+                </div>
+              </div>
+              
+              <div class="control-group">
+                <label class="control-label" for="input01">Longtitude</label>
+                <div class="controls">
+                  <input type="text" class="input-xlarge" id="longtitude" value="135.964415" name="longtitude" rel="popover" data-content="Enter event name" data-original-title="longtitude">
+                </div>
+              </div>
+            
+              <div class="control-group">
+                <label class="control-label" for="input01">Latitude</label>
+                <div class="controls">
+                  <input type="text" class="input-xlarge" id="latitude" value="34.983491" name="latitude" rel="popover" data-content="Enter event name" data-original-title="latitude">
+                </div>
+              </div>
+              
+              <div class="control-group">
+                <label class="control-label" for="input01">Date time</label>
+                <div class="controls">
+                  <input type="text" class="input-xlarge" id="date_time" name="date_time" rel="popover" data-content="Enter event date time" data-original-title="event date time">
+                  <a href="javascript:NewCal('date_time', 'ddmmmyyyy',true,24)"><img src="images/cal.gif" width="16" height="16" border="0"></a>
+                </div>
+              </div>
+              <div class="control-group">
+		            <label class="control-label" for="input01"></label>
+	              <div class="controls">
+	                <button type="submit" class="btn btn-success" rel="tooltip" title="first tooltip">Register this event</button>
+	              </div>
+	            </div>
+
+            </fieldset>
+          </form>
+        </div>
+        <div class="span6">
+          <td id="maparea" style="background-color:#E0E0E0;">
+            <div id="mapitems" style="width:480px; height:540px"></div>
+          </td>
+        </div>
+      </div>   
+    </div>
+    <hr>
+    
+    <footer>
+	    <div class="container">
+        <p>&copy; Communication Software Laboratory</p>
+      </div>
+    </footer>
+  
+  </body>
+
+  
