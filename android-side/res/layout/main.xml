@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:text="キャンパスマップ" />
+
+    <Button
+        android:id="@+id/schedule"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="スケジュール"
+        android:textStyle="bold" />
+
+    <com.google.android.maps.MapView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mapview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:apiKey="0QDE-73qIcohWtoennlYOAV4kNS-4OnuifpMqVQ"
+        android:clickable="true" />
+
+</LinearLayout>

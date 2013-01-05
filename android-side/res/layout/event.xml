@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget57"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/event_name"
+        android:layout_width="205dp"
+        android:layout_height="69dp"
+        android:text="イベント名"
+        android:textSize="60dp" />
+
+    <TextView
+        android:id="@+id/event_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="現在時刻"
+        android:textSize="30dp" />
+
+    <DigitalClock
+        android:id="@+id/widget37"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp" />
+
+    <ScrollView
+        android:id="@+id/widget39"
+        android:layout_width="252dp"
+        android:layout_height="234dp"
+        android:layout_x="34dp"
+        android:layout_y="69dp" >
+
+        <TextView
+            android:id="@+id/event_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="20dp" />
+    </ScrollView>
+
+    <ListView
+        android:id="@+id/event_list"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:layout_weight="0.94" >
+    </ListView>
+
+    <Button
+        android:id="@+id/TOP"
+        android:layout_width="106dp"
+        android:layout_height="wrap_content"
+        android:layout_x="40dp"
+        android:layout_y="343dp"
+        android:text="TOP"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/schedule"
+        android:layout_width="106dp"
+        android:layout_height="wrap_content"
+        android:layout_x="170dp"
+        android:layout_y="343dp"
+        android:text="スケジュール"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/touroku"
+        android:layout_width="103dp"
+        android:layout_height="wrap_content"
+        android:layout_x="104dp"
+        android:layout_y="389dp"
+        android:text="登録"
+        android:textColor="#ffff0033"
+        android:textStyle="bold" />
+
+</TableLayout>
