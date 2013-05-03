@@ -6,10 +6,10 @@
   $lng = $_POST['lng'];
 
   //connect db
-  $dbhost = '175.184.35.194';
-  $dbuser = 'cx0cjz7_ax1';
-  $dbpass = 'dxAZEKxH';
-  $dbname = 'cx0cjz7_ax1';
+  $dbhost = '';
+  $dbuser = '';
+  $dbpass = '';
+  $dbname = '';
 
   $conn = mysql_connect($dbhost, $dbuser, $dbpass) or die("can not connect sql");
   $selectdb = mysql_select_db($dbname, $conn);
